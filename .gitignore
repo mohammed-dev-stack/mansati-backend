@@ -1,0 +1,95 @@
+# 📁 الاعتماديات (Dependencies)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 🔐 ملفات البيئة (Environment Variables)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# 📦 ملفات البناء والإنتاج (Build/Output)
+dist/
+build/
+.next/
+out/
+coverage/
+.nyc_output/
+
+# 🗄️ ملفات قاعدة البيانات (Database)
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# 📝 سجلات النظام (Logs)
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ⚙️ ملفات مؤقتة (Temporary files)
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 🔧 إعدادات IDE (Editor/IDE)
+.vscode/
+.idea/
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# 🧪 ملفات الاختبارات (Test files)
+.nyc_output/
+coverage/
+test-results/
+junit.xml
+
+# 📦 ملفات الحزم (Package files)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 🚀 إعدادات النشر (Deployment)
+.DS_Store
+.cache
+.temp
+.tmp
+
+# 🔒 ملفات سرية (Secrets)
+*.pem
+*.key
+*.crt
+secrets/
+
+# 📁 مجلدات النظام (System folders)
+.vagrant/
+.docker/
+.elasticbeanstalk/
+
+# 🛡️ ملفات الأمان (Security)
+.ssl/
+certificates/
+
+# 📊 تقارير (Reports)
+reports/
+*.html
+*.xml
+
+# 🧹 متفرقات (Misc)
+*.pid
+*.seed
+*.pid.lock
+*.log.*
