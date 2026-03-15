@@ -1,74 +1,117 @@
-// backend/routes/followRoutes.js
-// 🛣️ مسارات المتابعة - API endpoints
-// @version 1.0.0
-// @lastUpdated 2026
-
 const express = require('express');
 const router = express.Router();
 const verifyJWT = require('../middleware/verifyJWT');
 const followController = require('../controllers/followController');
 
-// ============================================================================
-// جميع المسارات محمية بالتوكن (JWT)
-// ============================================================================
 router.use(verifyJWT);
 
-// ============================================================================
-// مسارات المتابعة الرئيسية
-// ============================================================================
+/**
+ * @openapi
+ * tags:
+ *   - name: Social
+ *     description: إدارة المتابعات والعلاقات بين المستخدمين
+ */
 
 /**
- * @route   POST /api/users/:userId/follow
- * @desc    متابعة مستخدم
- * @access  Private
+ * @openapi
+ * /api/users/{userId}/follow:
+ *   post:
+ *     summary: متابعة مستخدم معين
+ *     tags: [Social]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: تم متابعة المستخدم بنجاح
  */
 router.post('/:userId/follow', followController.followUser);
 
 /**
- * @route   DELETE /api/users/:userId/follow
- * @desc    إلغاء متابعة مستخدم
- * @access  Private
+ * @openapi
+ * /api/users/{userId}/follow:
+ *   delete:
+ *     summary: إلغاء متابعة مستخدم معين
+ *     tags: [Social]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: تم إلغاء المتابعة بنجاح
  */
 router.delete('/:userId/follow', followController.unfollowUser);
 
 /**
- * @route   GET /api/users/:userId/follow/status
- * @desc    التحقق من حالة المتابعة
- * @access  Private
+ * @openapi
+ * /api/users/{userId}/follow/status:
+ *   get:
+ *     summary: التحقق من حالة المتابعة بين المستخدمين
+ *     tags: [Social]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: حالة المتابعة جاهزة
  */
 router.get('/:userId/follow/status', followController.getFollowStatus);
 
-// ============================================================================
-// مسارات القوائم (Lists)
-// ============================================================================
-
 /**
- * @route   GET /api/users/:userId/followers
- * @desc    جلب قائمة متابعي مستخدم
- * @access  Private
+ * @openapi
+ * /api/users/{userId}/followers:
+ *   get:
+ *     summary: جلب قائمة المتابعين لمستخدم معين
+ *     tags: [Social]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: قائمة المتابعين جاهزة
  */
 router.get('/:userId/followers', followController.getFollowers);
 
 /**
- * @route   GET /api/users/:userId/following
- * @desc    جلب قائمة المستخدمين الذين يتابعهم
- * @access  Private
+ * @openapi
+ * /api/users/{userId}/following:
+ *   get:
+ *     summary: جلب قائمة المستخدمين الذين يتابعهم مستخدم معين
+ *     tags: [Social]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: قائمة المتابَعين جاهزة
  */
 router.get('/:userId/following', followController.getFollowing);
 
-// ============================================================================
-// مسار الحالات المتعددة (دفعة واحدة)
-// ============================================================================
-
 /**
- * @route   POST /api/users/follow/bulk-status
- * @desc    الحصول على حالة المتابعة لعدة مستخدمين دفعة واحدة
- * @access  Private
+ * @openapi
+ * /api/users/follow/bulk-status:
+ *   post:
+ *     summary: التحقق من حالة المتابعة لمجموعة من المستخدمين
+ *     tags: [Social]
+ *     responses:
+ *       200:
+ *         description: تم جلب الحالات بنجاح
  */
 router.post('/follow/bulk-status', followController.getBulkFollowStatus);
-
-// ============================================================================
-// تصدير المسارات
-// ============================================================================
 
 module.exports = router;

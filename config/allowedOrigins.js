@@ -1,8 +1,8 @@
-// قائمة الـ origins المسموح بها
 const allowedOrigins = [
-    "http://localhost:3000", // Frontend Dev
-    "http://127.0.0.1:3000", // بديل للـ localhost
-    "https://yourdomain.com", // Production
+    'https://mansati-frontend-b2kl.vercel.app', // الرابط الجديد الذي تستخدمه الآن
+    'https://mansati-frontend.vercel.app', // الرابط الأساسي
+    'http://localhost:3000',
+    'http://localhost:5173'
 ];
 
 module.exports = allowedOrigins;

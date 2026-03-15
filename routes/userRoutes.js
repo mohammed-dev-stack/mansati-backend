@@ -1,4 +1,3 @@
-// backend/routes/userRoutes.js
 const express = require("express");
 const router = express.Router();
 const verifyJWT = require("../middleware/verifyJWT");
@@ -20,28 +19,33 @@ const {
     getFollowing
 } = require("../controllers/followController");
 
-// ==========================================================================
-// المسارات العامة (لا تحتاج توكن)
-// ==========================================================================
-router.get("/", getAllUsers); // ✅ جلب جميع المستخدمين (عام)
-router.get("/search", searchUsers); // البحث عن مستخدمين (عام)
+/**
+ * @openapi
+ * /api/users:
+ * get:
+ * summary: جلب قائمة جميع المستخدمين
+ * tags: [Social]
+ */
+router.get("/", getAllUsers);
 
-// ==========================================================================
-// تطبيق middleware التحقق من التوكن على جميع المسارات التالية
-// ==========================================================================
+/**
+ * @openapi
+ * /api/users/search:
+ * get:
+ * summary: البحث عن مستخدمين بالاسم أو الإيميل
+ * tags: [Social]
+ */
+router.get("/search", searchUsers);
+
+// --- تطبيق الحماية للمسارات التالية ---
 router.use(verifyJWT);
 
-// ==========================================================================
-// المسارات المحمية (تحتاج توكن)
-// ==========================================================================
 router.get("/:id", getUser);
 router.put("/:id", updateUser);
 router.put("/:id/avatar", upload.single("avatar"), updateAvatar);
 router.delete("/:id", deleteUser);
 
-// ==========================================================================
-// مسارات المتابعة
-// ==========================================================================
+// --- مسارات المتابعة (Follow System) ---
 router.post("/:userId/follow", followUser);
 router.delete("/:userId/follow", unfollowUser);
 router.get("/:userId/follow/status", getFollowStatus);

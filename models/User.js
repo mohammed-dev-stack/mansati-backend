@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true, // ✅ هذا يكفي لعمل فهرس فريد
         lowercase: true,
         trim: true
     },
@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin', 'moderator'],
         default: 'user'
     },
-    // ✅ إضافة حقل الـ Refresh Token لدعم بقاء المستخدم متصلاً
     refreshToken: {
         type: String,
         default: null
@@ -76,15 +75,14 @@ const userSchema = new mongoose.Schema({
     toJSON: {
         transform: function(doc, ret) {
             delete ret.password;
-            delete ret.refreshToken; // تأمين التوكن وعدم إرساله في الردود العادية
+            delete ret.refreshToken;
             delete ret.__v;
             return ret;
         }
     }
 });
 
-// Indexes
-userSchema.index({ email: 1 });
+// ✅ تم حذف سطر تكرار فهرس الإيميل لإنهاء التحذير
 userSchema.index({ name: 'text' });
 userSchema.index({ followersCount: -1 });
 userSchema.index({ createdAt: -1 });

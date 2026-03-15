@@ -1,27 +1,75 @@
 const express = require("express");
 const router = express.Router();
 const verifyJWT = require("../middleware/verifyJWT");
+const { sendMessage, getConversation, getUserConversations, markMessagesAsRead } = require("../controllers/messageController");
 
-const {
-    sendMessage,
-    getConversation,
-    getUserConversations,
-    markMessagesAsRead,
-} = require("../controllers/messageController");
-
-// ✅ جميع المسارات محمية بالتوكن
 router.use(verifyJWT);
 
-// ✅ إرسال رسالة
+/**
+ * @openapi
+ * tags:
+ *   - name: Messages
+ *     description: نظام الدردشة والمراسلة الفورية
+ */
+
+/**
+ * @openapi
+ * /api/messages:
+ *   post:
+ *     summary: إرسال رسالة جديدة
+ *     tags: [Messages]
+ *     responses:
+ *       200:
+ *         description: تم إرسال الرسالة بنجاح
+ */
 router.post("/", sendMessage);
 
-// ✅ جلب المحادثة مع مستخدم آخر
-router.get("/conversation/:receiverId", getConversation);
-
-// ✅ جلب كل محادثات المستخدم
+/**
+ * @openapi
+ * /api/messages/user:
+ *   get:
+ *     summary: جلب كافة المحادثات الخاصة بالمستخدم الحالي
+ *     tags: [Messages]
+ *     responses:
+ *       200:
+ *         description: قائمة المحادثات جاهزة
+ */
 router.get("/user", getUserConversations);
 
-// ✅ تحديث حالة قراءة الرسائل
+/**
+ * @openapi
+ * /api/messages/conversation/{receiverId}:
+ *   get:
+ *     summary: جلب محادثة مع مستخدم محدد
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: receiverId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: تم جلب المحادثة بنجاح
+ */
+router.get("/conversation/:receiverId", getConversation);
+
+/**
+ * @openapi
+ * /api/messages/read/{senderId}:
+ *   patch:
+ *     summary: تعليم رسائل كمقروءة من مستخدم محدد
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: senderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: تم تحديث حالة الرسائل بنجاح
+ */
 router.patch("/read/:senderId", markMessagesAsRead);
 
 module.exports = router;
