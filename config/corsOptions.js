@@ -1,3 +1,4 @@
+// backend/config/corsOptions.js
 const allowedOrigins = require("./allowedOrigins");
 
 const corsOptions = {

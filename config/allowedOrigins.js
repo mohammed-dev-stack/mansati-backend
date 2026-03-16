@@ -1,3 +1,4 @@
+// backend/config/allowedOrigins.js
 const allowedOrigins = [
     'https://mansati-frontend-b2kl.vercel.app', // الرابط الجديد الذي تستخدمه الآن
     'https://mansati-frontend.vercel.app', // الرابط الأساسي

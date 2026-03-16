@@ -1,6 +1,6 @@
 // backend/controllers/authController.js
-// 🔐 متحكم المصادقة - متوافق مع ApiResponse الموحد
-// @version 2.2.0
+// 🔐 متحكم المصادقة - نسخة محسنة لدعم البيئات المتقاطعة (Cross-Origin)
+// @version 2.3.0
 // @lastUpdated 2026
 
 const bcrypt = require("bcrypt");
@@ -39,18 +39,23 @@ const register = async(req, res) => {
         user.refreshToken = refreshToken;
         await user.save();
 
+        // ✅ إعدادات الكوكيز المتوافقة مع البيئات المتقاطعة (Cross-Origin)
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction, // في الإنتاج يجب أن تكون true
+            sameSite: isProduction ? "none" : "lax", // none يسمح بالعبور بين النطاقات
             maxAge: 15 * 60 * 1000, // 15 دقيقة
+            path: "/",
         });
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام
+            path: "/",
         });
 
         res.status(201).json({
@@ -99,18 +104,22 @@ const login = async(req, res) => {
         user.lastLogin = new Date();
         await user.save();
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 15 * 60 * 1000,
+            path: "/",
         });
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
         });
 
         res.json({
@@ -135,7 +144,7 @@ const login = async(req, res) => {
 
 /**
  * @desc Refresh access token using refresh token
- * @route GET /api/auth/refresh
+ * @route POST /api/auth/refresh
  * @access Public
  */
 const refresh = async(req, res) => {
@@ -160,11 +169,14 @@ const refresh = async(req, res) => {
 
         const accessToken = generateAccessToken({ _id: user._id, email: user.email });
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 15 * 60 * 1000,
+            path: "/",
         });
 
         res.json({ success: true, message: "Token refreshed successfully" });
@@ -187,16 +199,20 @@ const logout = async(req, res) => {
             await User.findOneAndUpdate({ refreshToken: cookies.refreshToken }, { $unset: { refreshToken: 1 } });
         }
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.clearCookie("accessToken", {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
+            path: "/",
         });
 
         res.clearCookie("refreshToken", {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
+            path: "/",
         });
 
         res.json({ success: true, message: "Logout successful" });

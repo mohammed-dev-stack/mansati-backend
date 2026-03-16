@@ -1,3 +1,4 @@
+// backend/server.js
 // 🚀 Mansati Backend - النسخة الذهبية المستقرة
 require("dotenv").config();
 const express = require("express");
