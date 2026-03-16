@@ -1,11 +1,11 @@
-// backend/routes/authRoutes.js
 const express = require("express");
 const router = express.Router();
 const { register, login, refresh, logout } = require("../controllers/authController");
 
+// المسارات الأساسية للمصادقة
 router.post("/register", register);
 router.post("/login", login);
-router.post("/refresh", refresh); // ✅ إضافة هذا السطر (كان مفقوداً)
+router.post("/refresh", refresh);
 router.post("/logout", logout);
 
 module.exports = router;
